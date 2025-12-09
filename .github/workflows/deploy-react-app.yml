@@ -32,7 +32,7 @@ jobs:
       - name: 📤 Upload build artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./build
+          path: ./dist
 
   fossa-scan:
     runs-on: ubuntu-latest
