@@ -34,9 +34,25 @@ jobs:
         with:
           path: ./build
 
-  deploy:
+  fossa-scan:
     runs-on: ubuntu-latest
     needs: build
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔍 FOSSA Scan
+        uses: fossas/fossa-action@v1
+        with:
+          api-key: ${{ secrets.FOSSA_API_KEY }}
+          run-tests: true
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - fossa-scan
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
