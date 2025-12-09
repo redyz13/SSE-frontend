@@ -15,6 +15,7 @@
 /build
 
 # misc
+.package-lock.json
 .idea
 .DS_Store
 .env.local

@@ -93,7 +93,7 @@ Because the frontend is a Single Page Application (SPA), GreenIT-Analysis was al
 The frontend uses only one environment variable:
 
 ```
-REACT_APP_BACKEND_URL=http://localhost:4000
+VITE_APP_BACKEND_URL=http://localhost:4000
 ```
 
 If not provided, the application defaults to:
@@ -106,7 +106,7 @@ As defined in `api.js`:
 
 ```js
 export const API_BASE =
-  process.env.REACT_APP_BACKEND_URL || "http://localhost:4000";
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 ```
 
 ---
@@ -124,7 +124,7 @@ This command starts:
 The application will be available at:
 
 ```
-http://localhost:3000
+http://localhost:5173/SSE-frontend
 ```
 
 ---

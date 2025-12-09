@@ -7,7 +7,7 @@ import image2 from "../image/assistenzaOndaSX.svg";
 import image3 from "../image/assistenzaOndaDX.svg";
 import { addSegnalazione } from "../services/assistenza.js";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext.js";
+import { useAuth } from "../AuthContext.jsx";
 import { getRentalsByNoleggiante } from "../services/noleggi.js";
 import Cookies from "js-cookie";
 import { Alert, Box, Snackbar } from "@mui/material";
