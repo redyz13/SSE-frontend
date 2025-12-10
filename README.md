@@ -151,12 +151,12 @@ docker compose up --build
 
 This command starts:
 
-* `frontend` → Vite development server
+* `frontend` → Production container
 
 The application will be available at:
 
 ```
-http://localhost:5173/SSE-frontend
+http://localhost/SSE-frontend
 ```
 
 ---
