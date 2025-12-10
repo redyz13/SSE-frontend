@@ -119,7 +119,7 @@ docker compose up --build
 
 This command starts:
 
-* `frontend` → React development server (port 3000)
+* `frontend` → Vite development server
 
 The application will be available at:
 
