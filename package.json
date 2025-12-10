@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.2",
+    "license-checker": "^25.0.1",
     "vite": "^7.2.7"
   }
 }
