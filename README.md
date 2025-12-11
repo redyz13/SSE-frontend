@@ -50,6 +50,8 @@ It provides metrics such as:
 * Comparison with other tested sites
 
 In this project, WebsiteCarbon was used to evaluate the deployed version of the frontend hosted via GitHub Pages.
+* **GitHub Pages:**
+[https://redyz13.github.io/SSE-frontend/](https://redyz13.github.io/SSE-frontend/)
 
 ---
 
@@ -68,7 +70,9 @@ EcoIndex generates indicators such as:
 * Water consumption
 * Greenhouse gas emissions
 
-The tool was applied to the deployed frontend entrypoint to evaluate its environmental sustainability.
+In this project, EcoIndex was used to evaluate the deployed version of the frontend hosted via GitHub Pages
+* **GitHub Pages:**
+[https://redyz13.github.io/SSE-frontend/](https://redyz13.github.io/SSE-frontend/)
 
 ---
 
