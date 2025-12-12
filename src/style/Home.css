@@ -307,3 +307,16 @@
     visibility: hidden;
   }
 }
+
+.home-box {
+  width: 500px;
+}
+
+.home-alert {
+  width: 100%;
+}
+
+.bold {
+  font-weight: 700;
+}
+

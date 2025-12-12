@@ -141,7 +141,7 @@
 
   .listPageContainer {
     width: 90%;
-    margin: 0 auto; /* Centra il contenuto orizzontalmente */
+    margin: 0 auto;
   }
 
   .switchDescriptionContainer,
@@ -154,16 +154,16 @@
   .rentalList {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem; /* Riduci lo spazio tra gli elementi */
+    gap: 1.5rem; 
     margin-bottom: 1.5rem;
   }
 
   .rental {
     display: flex;
-    flex-direction: column; /* Cambiato da 'row' a 'column' */
+    flex-direction: column;
     gap: 2.5rem;
     justify-content: center;
-    align-items: center; /* Cambiato da 'flex-start' a 'center' */
+    align-items: center;
     border-radius: 0.625rem;
     border: 1px solid var(--scuro);
     background: var(--chiaro);
@@ -205,4 +205,156 @@
     width: 100%;
     margin: 1.5rem;
   }
+}
+
+.link-reset {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+}
+
+.spacer-mini {
+    margin: 1px;
+}
+
+.no-ads-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 50px;
+}
+
+.pulsanteModifica a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rentalList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.rental {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.rentalItem {
+    flex: 1;
+    padding: 10px;
+    min-width: 150px;
+    text-align: center;
+}
+
+.rentalItem h3 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.rentalItem p {
+    font-weight: 500;
+    margin: 0 0 10px 0;
+}
+
+.text-highlight {
+    color: #282A28;
+    font-weight: bold;
+}
+
+.image-col img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.status-badge.richiesta {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.accettata {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.rifiutata {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.inizio {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+.pulsante {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+    text-decoration: none;
+    background-color: #eee;
+    color: #333;
+    display: inline-block;
+}
+
+.pulsante:hover {
+    background-color: #ddd;
+}
+
+.accept-btn {
+    background-color: #28a745;
+    color: white;
+}
+.accept-btn:hover { background-color: #218838; }
+
+.reject-btn {
+    background-color: #dc3545;
+    color: white;
+}
+.reject-btn:hover { background-color: #c82333; }
+
+.pay-btn {
+    background-color: #007bff;
+    color: white;
+}
+.pay-btn:hover { background-color: #0056b3; }
+
+.no-data {
+    text-align: center;
+    width: 100%;
+    padding: 30px;
+    color: #888;
 }

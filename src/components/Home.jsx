@@ -1,115 +1,141 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getPremiumAds } from "../services/annunciNoleggio";
+import { Alert, Box, Snackbar } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import image1 from "../image/ondinaprova1.svg";
-import image2 from "../image/ondinaprova2.svg";
-import image3 from "../image/onda2nuovo1.svg";
-import image4 from "../image/onda2nuovo2.svg";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import { getPremiumAds } from "../services/annunciNoleggio";
+import ondina1 from "../image/ondinaprova1.svg";
+import ondina2 from "../image/ondinaprova2.svg";
+import ondaBassa from "../image/onda2nuovo1.svg";
+import ondaAlta from "../image/onda2nuovo2.svg";
 import "../style/Home.css";
-import { Alert, Box, Snackbar } from "@mui/material";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [annunci, setAnnunci] = useState();
-  const [currentSlide1, setCurrentSlide1] = useState(0);
-  const [currentSlide2, setCurrentSlide2] = useState(1);
-  const [currentSlide3, setCurrentSlide3] = useState(2);
-  const [searchTerm, setSearchTerm] = useState();
-  const [alertState, setAlertState] = useState("error");
-  const [alertMessage, setAlertMessage] = useState("");
-  const [open, setOpen] = useState(false);
 
-  const handleClick = () => {
-    setOpen(true);
+  const [annunci, setAnnunci] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [feedback, setFeedback] = useState({
+    open: false,
+    severity: "error",
+    message: "",
+  });
+
+  const triggerAlert = (severity, message) => {
+    setFeedback({ open: true, severity, message });
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
+  const handleCloseFeedback = (event, reason) => {
+    if (reason === "clickaway") return;
+    setFeedback((prev) => ({ ...prev, open: false }));
   };
 
-  useEffect(() => {
-    const handleAlert = (state, message) => {
-      setAlertState(state);
-      setAlertMessage(message);
-      handleClick();
-    };
+  const handleSearch = () => {
+    navigate(`/catalogo/${searchTerm}`);
+  };
 
-    getPremiumAds().then((response) => {
-      if (response.ok) {
-        response.json().then((ad) => {
-          setAnnunci(ad);
-        });
-      } else {
-        response.json().then((result) => {
-          handleAlert("error", result.message);
-        });
-      }
-    });
-  }, []);
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSearch();
+  };
 
   const nextSlide = () => {
-    setCurrentSlide1((prevSlide) => (prevSlide + 1) % annunci.length);
-    setCurrentSlide2((prevSlide) => (prevSlide + 1) % annunci.length);
-    setCurrentSlide3((prevSlide) => (prevSlide + 1) % annunci.length);
+    if (annunci.length === 0) return;
+    setActiveIndex((prev) => (prev + 1) % annunci.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide1(
-      (prevSlide) => (prevSlide - 1 + annunci.length) % annunci.length
-    );
-    setCurrentSlide2(
-      (prevSlide) => (prevSlide - 1 + annunci.length) % annunci.length
-    );
-    setCurrentSlide3(
-      (prevSlide) => (prevSlide - 1 + annunci.length) % annunci.length
-    );
+    if (annunci.length === 0) return;
+    setActiveIndex((prev) => (prev - 1 + annunci.length) % annunci.length);
   };
+
+  const getSlideClass = useCallback(
+    (index) => {
+      const len = annunci.length;
+      if (len === 0) return "inactive";
+
+      if (len < 3) return "secondo";
+
+      const prevIndex = (activeIndex - 1 + len) % len;
+      const nextIndex = (activeIndex + 1) % len;
+
+      if (index === prevIndex) return "primo";
+      if (index === activeIndex) return "secondo";
+      if (index === nextIndex) return "terzo";
+
+      return "inactive";
+    },
+    [activeIndex, annunci.length]
+  );
+
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await getPremiumAds();
+        if (response.ok) {
+          const data = await response.json();
+          setAnnunci(Array.isArray(data) ? data : []);
+        } else {
+          let msg = "Errore nel caricamento degli annunci";
+          try {
+            const json = await response.json();
+            msg = json.message || msg;
+          } catch {}
+          triggerAlert("error", msg);
+        }
+      } catch (error) {
+        triggerAlert("error", "Errore di connessione al server");
+      }
+    };
+
+    fetchAds();
+  }, []);
+
+  const isLoaded = annunci.length > 0;
 
   return (
     <div className="Page">
       <Navbar />
-      <Box sx={{ width: 500 }}>
+
+      <Box className="home-box">
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          open={open}
+          open={feedback.open}
           autoHideDuration={4000}
-          onClose={handleClose}
+          onClose={handleCloseFeedback}
         >
           <Alert
-            onClose={handleClose}
-            severity={alertState}
+            onClose={handleCloseFeedback}
+            severity={feedback.severity}
             variant="filled"
-            sx={{ width: "100%" }}
+            className="home-alert"
           >
-            {alertMessage}
+            {feedback.message}
           </Alert>
         </Snackbar>
       </Box>
-      <div className="sezioneh">
-        <img className="imaget" src={image4} alt="Immagine decorativa" />
+
+      <main className="sezioneh">
+        <img className="imaget" src={ondaAlta} alt="" aria-hidden="true" />
+
         <div className="intestazione">
           <h2>Home</h2>
+
           <div className="descrizione">
             <p>Rently apre le porte al futuro dell'economia sostenibile:</p>
             <p>
-              <span style={{ fontWeight: "bold" }}> risparmi</span> denaro
-              evitando acquisti occasionali e{" "}
-              <span style={{ fontWeight: "bold" }}>guadagni</span> su ciò che
+              <span className="bold">risparmi</span> denaro evitando acquisti
+              occasionali e <span className="bold">guadagni</span> su ciò che
               non usi
             </p>
             <p>
-              {" "}
-              mettendolo a <span style={{ fontWeight: "bold" }}>noleggio</span>.
+              mettendolo a <span className="bold">noleggio</span>.
             </p>
           </div>
+
           <div className="ricerca">
             <h4>Cerca il tuo prossimo noleggio</h4>
             <input
@@ -117,45 +143,43 @@ const Home = () => {
               placeholder="Cerca un articolo"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <div className="imagebox">
-              <img className="imager" src={image1} alt="Immagine decorativa" />
-              <img className="imagel" src={image2} alt="Immagine decorativa" />
-              <button
-                onClick={() => navigate(`/catalogo/${searchTerm}`)}
-                className="cerca-button"
-              >
+              <img className="imager" src={ondina1} alt="" aria-hidden="true" />
+              <img className="imagel" src={ondina2} alt="" aria-hidden="true" />
+              <button onClick={handleSearch} className="cerca-button">
                 Cerca
               </button>
             </div>
           </div>
         </div>
+
         <div className="annunciHome">
-          <p>Annunci</p>
+          <p>Annunci in evidenza</p>
+
           <div className="slider">
-            <button onClick={prevSlide}>
+            <button
+              onClick={prevSlide}
+              disabled={!isLoaded}
+              aria-label="Annuncio precedente"
+              className="nav-arrow"
+            >
               <ArrowBackIosIcon />
             </button>
-            {annunci && (
+
+            {isLoaded && (
               <div className="listaAnnunciHome">
                 {annunci.map((ad, index) => (
                   <Link
-                    className={`${index === currentSlide1 ? "primo" : ""} ${
-                      index === currentSlide2 ? "secondo" : ""
-                    } ${index === currentSlide3 ? "terzo" : ""} ${
-                      index !== currentSlide1 &&
-                      index !== currentSlide2 &&
-                      index !== currentSlide3
-                        ? "inactive"
-                        : ""
-                    }`}
+                    className={getSlideClass(index)}
                     to={`/dettagli/${ad.id}`}
                     key={ad.id}
                   >
-                    <div key={ad.id} className={`card`}>
+                    <div className="card">
                       <img
                         src={ad.immagine}
-                        alt="Immagine annuncio"
+                        alt={`Immagine di ${ad.nome}`}
                         loading="lazy"
                       />
                       <div className="card-description">
@@ -167,16 +191,25 @@ const Home = () => {
                 ))}
               </div>
             )}
-            <button onClick={nextSlide}>
+
+            <button
+              onClick={nextSlide}
+              disabled={!isLoaded}
+              aria-label="Annuncio successivo"
+              className="nav-arrow"
+            >
               <ArrowForwardIosIcon />
             </button>
           </div>
+
           <Link className="scopri" to="/catalogo">
             Scopri altri annunci
           </Link>
         </div>
-        <img className="imageb" src={image3} alt="Immagine decorativa" />
-      </div>
+
+        <img className="imageb" src={ondaBassa} alt="" aria-hidden="true" />
+      </main>
+
       <Footer />
     </div>
   );

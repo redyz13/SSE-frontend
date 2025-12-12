@@ -20,19 +20,15 @@ const Signup = () => {
   const [logo, setLogo] = useState(logoNonDaltonici);
   const { login, daltonico } = useAuth();
   const navigate = useNavigate();
+
   const [alertState, setAlertState] = useState("error");
   const [alertMessage, setAlertMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
+  const handleClick = () => setOpen(true);
+  const handleClose = (_, reason) => {
+    if (reason === "clickaway") return;
     setOpen(false);
   };
 
@@ -46,51 +42,72 @@ const Signup = () => {
     setLogo(daltonico ? logoDaltonici : logoNonDaltonici);
   }, [daltonico]);
 
-  const handleSignup = () => {
+  const handleSignup = async (e) => {
+    e?.preventDefault();
+
+    const _nome = nome.trim();
+    const _cognome = cognome.trim();
+    const _email = email.trim();
+    const _username = username.trim();
+    const _password = password.trim();
+    const _confPassword = confPassword.trim();
+
     if (
-      nome === "" ||
-      cognome === "" ||
-      email === "" ||
-      username === "" ||
-      password === "" ||
-      confPassword === ""
+      !_nome ||
+      !_cognome ||
+      !_email ||
+      !_username ||
+      !_password ||
+      !_confPassword
     ) {
       handleAlert("error", "Inserire tutti i campi");
-    } else {
-      if (password === confPassword) {
-        const newUser = {
-          nome,
-          cognome,
-          email,
-          username,
-          password,
-          premium: false,
-        };
-        addUser(newUser).then((response) => {
-          if (response.ok) {
-            response.json().then((newUser) => {
-              if (newUser) {
-                login(newUser);
-                navigate("/");
-              } else {
-                handleAlert("error", "Credenziali non valide");
-              }
-            });
-          } else {
-            response.json().then((errorMessage) => {
-              handleAlert("error", errorMessage.message);
-            });
-          }
-        });
+      return;
+    }
+    if (_password !== _confPassword) {
+      handleAlert("error", "Password non coincidenti");
+      return;
+    }
+
+    const newUser = {
+      nome: _nome,
+      cognome: _cognome,
+      email: _email,
+      username: _username,
+      password: _password,
+      premium: false,
+    };
+
+    try {
+      setLoading(true);
+      const response = await addUser(newUser);
+      if (response.ok) {
+        const created = await response.json();
+        if (created) {
+          login(created);
+          navigate("/");
+        } else {
+          handleAlert("error", "Credenziali non valide");
+        }
       } else {
-        handleAlert("error", "Password non coincidenti");
+        let msg = "";
+        try {
+          const data = await response.json();
+          msg = data?.message;
+        } catch {
+          msg = await response.text();
+        }
+        handleAlert("error", msg || "Errore durante la registrazione");
       }
+    } catch {
+      handleAlert("error", "Errore di rete");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ justifyContent: "center" }} className="Page">
-      <Box sx={{ width: 500 }}>
+    <div className="Page signup-centered">
+      <Box className="signup-box">
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={open}
@@ -101,14 +118,16 @@ const Signup = () => {
             onClose={handleClose}
             severity={alertState}
             variant="filled"
-            sx={{ width: "100%" }}
+            className="signup-alert"
           >
             {alertMessage}
           </Alert>
         </Snackbar>
       </Box>
+
       <img className="topr" src={image3} alt="Immagine decorativa" />
-      <div className="box1">
+
+      <form className="box1" onSubmit={handleSignup} noValidate>
         <div className="image-box1">
           <img src={image1} alt="Immagine decorativa" />
           <div className="titolo">Registrati a </div>
@@ -118,19 +137,17 @@ const Signup = () => {
             </div>
             <div className="brand-name">ently</div>
           </div>
-          <img
-            style={{ transform: "scaleX(-1)" }}
-            src={image1}
-            alt="Immagine decorativa"
-          />
+          <img className="mirror-x" src={image1} alt="Immagine decorativa" />
         </div>
+
         <div className="par">
           <p>
             Inizia subito a dare valore agli oggetti, risparmia e sii
             sostenibile con Rently:
-          </p>{" "}
+          </p>
           <p>noleggio intelligente, guadagno costante.</p>
         </div>
+
         <div className="params">
           <div className="param">
             <p>Nome</p>
@@ -140,8 +157,10 @@ const Signup = () => {
               placeholder="Inserisci il tuo nome"
               onChange={(e) => setNome(e.target.value)}
               required
+              autoComplete="given-name"
             />
           </div>
+
           <div className="param">
             <p>Cognome</p>
             <input
@@ -150,8 +169,10 @@ const Signup = () => {
               placeholder="Inserisci il tuo cognome"
               onChange={(e) => setCognome(e.target.value)}
               required
+              autoComplete="family-name"
             />
           </div>
+
           <div className="param">
             <p>Username</p>
             <input
@@ -160,8 +181,10 @@ const Signup = () => {
               placeholder="Inserisci il tuo username"
               onChange={(e) => setUsername(e.target.value)}
               required
+              autoComplete="username"
             />
           </div>
+
           <div className="param">
             <p>Email</p>
             <input
@@ -170,8 +193,10 @@ const Signup = () => {
               placeholder="Inserisci la tua email"
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
             />
           </div>
+
           <div className="param">
             <p>Password</p>
             <input
@@ -180,8 +205,10 @@ const Signup = () => {
               placeholder="Inserisci la tua password"
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="new-password"
             />
           </div>
+
           <div className="param">
             <p>Conferma Password</p>
             <input
@@ -190,12 +217,15 @@ const Signup = () => {
               placeholder="Conferma la tua password"
               onChange={(e) => setConfPassword(e.target.value)}
               required
+              autoComplete="new-password"
             />
           </div>
         </div>
-        <button className="pulsante" onClick={handleSignup}>
-          Registrati
+
+        <button className="pulsante" type="submit" disabled={loading}>
+          {loading ? "Registrazione..." : "Registrati"}
         </button>
+
         <div className="opzioni">
           <p>
             Hai già un account? <Link to="/login">Accedi</Link>
@@ -204,7 +234,8 @@ const Signup = () => {
             Torna alla <Link to="/">home</Link>
           </p>
         </div>
-      </div>
+      </form>
+
       <img className="bottoml" src={image2} alt="Immagine decorativa" />
     </div>
   );

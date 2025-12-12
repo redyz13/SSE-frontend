@@ -13,9 +13,10 @@
 
 # production
 /build
+/dist
 
 # misc
-.package-lock.json
+package-lock.json
 .idea
 .DS_Store
 .env.local

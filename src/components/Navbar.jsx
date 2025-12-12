@@ -23,27 +23,6 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const userMenu = isLoggedIn ? (
-    <div className="user-menu">
-      <div className="menu-switch">
-        <p className="menu-item">{username}</p>
-      </div>
-      <div className="dropdown-content">
-        <div className="dropdown-style">
-          <Link to="/profilo">Area Personale</Link>
-          <Link to="/richieste">Le mie richieste</Link>
-          <Link to="/annunci">I miei Annunci</Link>
-          <Link to="/noleggi">I miei Noleggi</Link>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <div className="menu-item">
-      <Link to="/login">Accedi</Link>
-    </div>
-  );
-
   return (
     <div className="navbar">
       <Link className="home" to="/">
@@ -54,6 +33,7 @@ const Navbar = () => {
           <div className="brand-name">ently</div>
         </div>
       </Link>
+
       <div className="menu">
         <div className="menu-item">
           <Link to="/">Home</Link>
@@ -67,7 +47,26 @@ const Navbar = () => {
         <div className="menu-item">
           <Link to="/assistenza">Assistenza</Link>
         </div>
-        {userMenu}
+
+        {isLoggedIn ? (
+          <div className="user-menu">
+            <p className="menu-item">{username}</p>
+            <div className="dropdown-content">
+              <div className="dropdown-style">
+                <Link to="/profilo">Area Personale</Link>
+                <Link to="/richieste">Le mie richieste</Link>
+                <Link to="/annunci">I miei Annunci</Link>
+                <Link to="/noleggi">I miei Noleggi</Link>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="menu-item">
+            <Link to="/login">Accedi</Link>
+          </div>
+        )}
+
         <div className="search-bar">
           <input
             type="text"

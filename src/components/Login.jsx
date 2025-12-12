@@ -17,25 +17,21 @@ const Login = () => {
   const { login, daltonico } = useAuth();
   const navigate = useNavigate();
   const [logo, setLogo] = useState(logoNonDaltonici);
+
   const [alertState, setAlertState] = useState("error");
   const [alertMessage, setAlertMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
+  const handleClick = () => setOpen(true);
+  const handleClose = (_, reason) => {
+    if (reason === "clickaway") return;
     setOpen(false);
   };
 
-  const hendleAlert = (state, message) => {
+  const handleAlert = (state, message) => {
     setAlertState(state);
-    setAlertMessage(message);
+    setAlertMessage(message || "");
     handleClick();
   };
 
@@ -43,32 +39,44 @@ const Login = () => {
     setLogo(daltonico ? logoDaltonici : logoNonDaltonici);
   }, [daltonico]);
 
-  const handleLogin = () => {
-    if (username === "" || password === "")
-      hendleAlert("error", "inserire entrambi i parametri");
-    else {
-      getUserByEmailAndPassword(username, password).then((response) => {
-        if (response.ok) {
-          response.json().then((newUser) => {
-            if (newUser) {
-              login(newUser);
-              navigate("/");
-            } else {
-              hendleAlert("error", "Errore durante il login");
-            }
-          });
+  const handleLogin = async (e) => {
+    e?.preventDefault();
+    if (!username.trim() || !password.trim()) {
+      handleAlert("error", "Inserisci sia email che password");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await getUserByEmailAndPassword(username, password);
+      if (response.ok) {
+        const newUser = await response.json();
+        if (newUser) {
+          login(newUser);
+          navigate("/");
         } else {
-          response.json().then((result) => {
-            hendleAlert("error", result.message);
-          });
+          handleAlert("error", "Errore durante il login");
         }
-      });
+      } else {
+        let msg = "";
+        try {
+          const data = await response.json();
+          msg = data?.message;
+        } catch {
+          msg = await response.text();
+        }
+        handleAlert("error", msg || "Credenziali non valide");
+      }
+    } catch {
+      handleAlert("error", "Errore di rete");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ justifyContent: "center" }} className="Page">
-      <Box sx={{ width: 500 }}>
+    <div className="Page login-centered">
+      <Box className="login-box">
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={open}
@@ -79,14 +87,16 @@ const Login = () => {
             onClose={handleClose}
             severity={alertState}
             variant="filled"
-            sx={{ width: "100%" }}
+            className="login-alert"
           >
             {alertMessage}
           </Alert>
         </Snackbar>
       </Box>
+
       <img className="top" src={image4} alt="Immagine decorativa" />
-      <div className="box">
+
+      <form className="box" onSubmit={handleLogin}>
         <div className="image-box">
           <img className="right" src={image1} alt="Immagine decorativa" />
           <img className="left" src={image2} alt="Immagine decorativa" />
@@ -97,17 +107,21 @@ const Login = () => {
             <div className="brand-name">ently</div>
           </div>
         </div>
+
         <div className="titolo">Accedi</div>
+
         <div className="parametro">
           <p>Email</p>
           <input
-            type="text"
+            type="email"
             value={username}
             placeholder="Inserisci la tua email"
             onChange={(e) => setUsername(e.target.value)}
+            autoComplete="email"
             required
           />
         </div>
+
         <div className="parametro">
           <p>Password</p>
           <input
@@ -115,12 +129,15 @@ const Login = () => {
             value={password}
             placeholder="Inserisci la tua password"
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
             required
           />
         </div>
-        <button className="pulsante" onClick={handleLogin}>
-          Accedi
+
+        <button className="pulsante" type="submit" disabled={loading}>
+          {loading ? "Accesso..." : "Accedi"}
         </button>
+
         <div className="opzioni">
           <p>
             Non hai ancora un account? <Link to="/signup">Registrati</Link>
@@ -129,7 +146,8 @@ const Login = () => {
             Torna alla <Link to="/">home</Link>
           </p>
         </div>
-      </div>
+      </form>
+
       <img className="bottom" src={image3} alt="Immagine decorativa" />
     </div>
   );

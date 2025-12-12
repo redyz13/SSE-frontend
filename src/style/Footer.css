@@ -81,7 +81,6 @@
   color: var(--medio);
 }
 
-/* Media query per rendere il footer responsive */
 @media (max-width: 768px) {
   .footer {
     flex-direction: column;
@@ -116,4 +115,26 @@
     height: 3.25rem;
     padding: 0.25rem;
   }
+}
+
+.btn-dyslexic {
+    font-family: "OpenDyslexic", sans-serif;
+    font-size: 0.725rem;
+}
+
+.info-link {
+    cursor: pointer;
+}
+
+.accessibility-link {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+    padding: 5px 0;
+}
+
+.accessibility-link:hover {
+    text-decoration: underline;
 }

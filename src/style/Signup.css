@@ -109,3 +109,31 @@
     width: 90%;
   }
 }
+
+
+.signup-centered {
+    justify-content: center;
+}
+
+.signup-box {
+    width: 500px;
+}
+
+.signup-alert {
+    width: 100%;
+}
+
+.mirror-x {
+    transform: scaleX(-1);
+}
+
+.pulsante:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .signup-box {
+        width: 100%;
+    }
+}
