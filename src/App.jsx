@@ -1,8 +1,7 @@
-import React from "react";
 import "@fontsource/opendyslexic";
 import "@fontsource/fredoka";
 import "@fontsource/fredoka-one";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Catalogo from "./components/Catalogo";
 import Dettagli from "./components/Dettagli";
@@ -23,7 +22,7 @@ import "./style/App.css";
 const App = () => {
   return (
     <div className="App">
-      <Router basename="/SSE-frontend">
+      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalogo" element={<Catalogo />} />
