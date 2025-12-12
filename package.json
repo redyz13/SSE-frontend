@@ -5,24 +5,24 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
-    "@fontsource/fredoka": "^5.0.8",
-    "@fontsource/fredoka-one": "4.5.0",
-    "@fontsource/opendyslexic": "^5.0.7",
-    "@mui/icons-material": "^5.15.4",
-    "@mui/material": "^5.15.4",
-    "@mui/x-date-pickers": "^6.18.7",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.6.5",
-    "dayjs": "^1.11.10",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fontsource/fredoka": "^5.2.10",
+    "@fontsource/fredoka-one": "5.2.5",
+    "@fontsource/opendyslexic": "^5.2.5",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
+    "@mui/x-date-pickers": "^8.22.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "axios": "^1.13.2",
+    "dayjs": "^1.11.19",
     "js-cookie": "^3.0.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.1",
-    "web-vitals": "^2.1.4"
+    "react": "^19.2.2",
+    "react-dom": "^19.2.2",
+    "react-router-dom": "^7.10.1",
+    "web-vitals": "^5.1.0"
   },
   "scripts": {
     "dev": "vite",
@@ -51,6 +51,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.2",
     "license-checker": "^25.0.1",
-    "vite": "^7.2.7"
+    "vite": "^7.2.7",
+    "npm-check-updates": "^19.2.0"
   }
 }

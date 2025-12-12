@@ -171,8 +171,6 @@
   max-height: 22.5em;
 }
 
-/*CSS review begin*/
-
 .reviewsContainer {
   width: 100%;
   display: flex;
@@ -316,4 +314,41 @@
   .containerUserReviews {
     width: auto;
   }
+}
+
+.info-box {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-box p {
+  text-align: left;
+  margin: 0;
+}
+
+.info-label {
+  font-weight: bold;
+}
+
+.expired-btn {
+  background-color: #ccc;
+  cursor: not-allowed;
+  border: 1px solid #999;
+}
+
+.mui-rating-custom {
+  color: #282a28 !important;
+}
+
+.mui-rating-small {
+  color: #282a28 !important;
+  font-size: 1.2rem !important;
+}
+
+.no-reviews {
+  font-style: italic;
+  color: #666;
+  padding: 20px;
 }
